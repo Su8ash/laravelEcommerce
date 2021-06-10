@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProductsController;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
@@ -16,16 +17,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/', function () {
-    $productList = Product::latest('id')->get();
-
-    $tabItem = ["Subash", "Hamal", "Yes"];
-
-    return view('home', [
-        'productList' => $productList,
-        'tabItem' => $tabItem,
-    ]);
-});
+Route::get('/', [ProductsController::class, 'index']);
 
 Route::get('/product-details/{productId}', function ($id) {
     return view('productDetails', [
@@ -44,7 +36,23 @@ Route::get('/category/{category}', function (Category $category) {
     ]);
 });
 
-// Route::get('/', function () {
+
+
+//Admin Routing
+
+Route::get('/admin/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+
+Route::get('/admin/products', [App\Http\Controllers\Admin\ProductsController::class, 'index'])->name('adminProductList');
+
+Route::get('/admin/products/create', [App\Http\Controllers\Admin\ProductsController::class, 'create'])->name('createProduct');
+
+Route::post('/admin/products/store', [App\Http\Controllers\Admin\ProductsController::class, 'store']);
+
+Route::get('/admin/products/edit/{product}', [App\Http\Controllers\Admin\ProductsController::class, 'edit'])->name('editProduct');
+
+Route::post('/admin/products/update/{id}', [App\Http\Controllers\Admin\ProductsController::class, 'update']);
+
+// Route::get('/', function () { 
 //     return view('welcome');
 // });
 
